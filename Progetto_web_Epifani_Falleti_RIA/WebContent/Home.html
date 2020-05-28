@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Home Page</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<div align="right">
+		<a href="Logout">Logout</a>
+	</div>
+	<h1>Welcome to the Home Page</h1>
+	<p>Nice to see you again <span id="id_username"></span></p>
+	<div id="id_alert" class="alertmessage"></div>	
+	<table>
+		<tr>
+			<td>
+			<table id="id_conticontainer" class="boxed">
+			
+					<thead>
+						<tr>
+							<th>Bank account id</th>
+							<th>Amount</th>
+							<th>Details</th>
+						</tr>
+					</thead>
+					
+					<tbody id="id_conticontainerbody">
+					
+					</tbody>
+			</table>
+			</td>
+			<td><table id="id_trasferimenticontainer" class="boxed">
+					<thead>
+						<tr>
+							<th>Transfer ID</th>
+							<th>Amount</th>
+							<th>Bank Account ID</th>
+							<th>Purpose</th>
+							<th>Date</th>
+							<th>Status</th>						
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td id="id_transferid"></td>
+							<td id="id_amount"></td>
+							<td id="id_bankAccountId"></td>
+							<td id="id_purpose"></td>
+							<td id="id_date"></td>
+							<td id="id_status"></td>
+						</tr>
+					</tbody>
+				</table>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<p>Use the form to make a transfer</p>
+				<form id="id_createtransferform" action="#">
+					<fieldset>
+						User ID: <input type="number" name="destUserID" required> <br> 
+						Bank account ID: <input type="number" name="destContoID" required><br>
+						Amount: <input type="number" name="amount"  required><br>
+						Purpose: <input type="text" name="causale" required><br>
+						<input type="button" name="next" value="next" class="next">
+					</fieldset>
+				</form>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
