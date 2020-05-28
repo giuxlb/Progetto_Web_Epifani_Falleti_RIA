@@ -13,15 +13,15 @@
             var message = req.responseText;
             switch (req.status) {
               case 200:
-            	document.getElementById("user").textContent = message;
+            	document.getElementById("user").value = message;
             	document.getElementById("infomessage").textContent = "Utente registrato";
-                window.location.href = "index.html";
+              
                 break;
               case 400: // bad request
-                document.getElementById("errormessage").textContent = message;
+                document.getElementById("errormessageR").textContent = message;
                 break;
               case 500: // server error
-            	document.getElementById("errormessage").textContent = message;
+            	document.getElementById("errormessageR").textContent = message;
                 break;
             }
           }

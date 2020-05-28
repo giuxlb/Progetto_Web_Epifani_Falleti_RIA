@@ -39,14 +39,14 @@ public class UserDao {
 		}
 
 	}
-	
-	public boolean registerUser(String username, String password, String name, String surname) throws SQLException{
+
+	public boolean registerUser(String username, String password, String name, String surname) throws SQLException {
 		String query = "SELECT * FROM esercizio4RIA.user where username = ?";
-		String query2 = "INSERT INTO esercizio4RIA.user VALUES (?,?,?,?)";
-		
+		String query2 = "INSERT INTO esercizio4RIA.user (username,password,name,surname) VALUES (?,?,?,?)";
+
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setString(1, username);
-			
+
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (result.isBeforeFirst()) {
 					return false;
