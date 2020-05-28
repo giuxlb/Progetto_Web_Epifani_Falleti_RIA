@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login page</title>
+<script src="utils.js" charset="utf-8" defer></script>
+<script src="loginManagement.js" charset="utf-8" defer></script>
+
+</head>
+<body>
+	<h1>Welcome to the mission management application</h1>
+
+	<form action="#">
+	<fieldset>
+		Username: <input id="user" type="text" name="username" required> <br>
+		Password: <input type="password" name="pwd" required><br>
+		<input id="loginbutton" type="button" value="login">
+		<p id="errormessage"></p>
+		<p id="infomessage"></p>
+	</fieldset></form>
+
+	<h2>Form per la registrazione</h2>
+	<form action="#">
+	<fieldset>
+		Mail: <input type="text" name="username" required> <br>
+		Nome: <input type="text" name="name" required> <br>
+		Cognome: <input type="text" name="surname" required> <br>
+		Password: <input type="password" name="pwd" required><br>
+		Ripeti Password: <input type="password" name="pwdrip" required><br>
+		<input id="registerbutton" type="button" value="register">
+		<p id="errormessage"></p>
+	</fieldset>
+	</form>
+</body>
+</html>
