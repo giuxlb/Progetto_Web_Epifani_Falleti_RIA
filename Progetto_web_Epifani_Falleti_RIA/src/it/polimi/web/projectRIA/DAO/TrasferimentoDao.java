@@ -92,7 +92,7 @@ public class TrasferimentoDao {
 				}
 			}
 		}
-		query = "SELECT * FROM esercizio4.trasferimento where DestContoID = ?";
+		query = "SELECT * FROM esercizio4RIA.trasferimento where DestContoID = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
