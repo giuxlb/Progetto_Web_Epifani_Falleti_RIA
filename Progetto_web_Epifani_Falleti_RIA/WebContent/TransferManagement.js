@@ -189,7 +189,7 @@
           row.appendChild(datecell);
           
           statuscell = document.createElement("td");
-          if (self.contoID == trasferimento.DestContoID)
+          if (self.contoID == trasferimento.DestContoId)
         	  statuscell.textContent = "INGRESSO";
           else{
         	  statuscell.textContent = "USCITA";
