@@ -3,8 +3,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
-<link rel="stylesheet" type="text/css" media="all"
-	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+<script src="utils.js" charset="utf-8" defer></script>
+<script src="TransferManagement.js" charset="utf-8" defer></script>
 </head>
 <body>
 	<div align="right">
@@ -61,10 +61,14 @@
 				</form>
 			</td>
 			<td id = "id_confermaTrasferimento">
+			<h2>Transfer gone well</h2>
+			<h3>Addresse info</h3>
 			<p>Bank account ID of addresse <span id="id_contoAddr"></span></p>
 			<p>User ID of addresse <span id="id_userAddr"></span></p>
-			<p><span id="id_contoAddr"></span></p>
-			<p>Bank account ID of addressee <span id="id_contoAddr"></span></p>
+			<h3>Your info</h3>
+			<p>Bank account ID  <span id="id_conto"></span></p>
+			<p>Your User ID <span id="id_user"></span></p>
+			<p>Actual balance<span id="id_amount"></span></p>
 			
 			
 			</td>

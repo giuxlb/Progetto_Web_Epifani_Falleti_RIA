@@ -17,7 +17,7 @@ public class ContoDao {
 	}
 
 	public List<Conto> findContoByUser(int userId) throws SQLException {
-		String query = "SELECT * FROM esercizio4.conto where userID = ?";
+		String query = "SELECT * FROM esercizio4RIA.conto where userID = ?";
 		List<Conto> conti = new ArrayList<Conto>();
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, userId);
@@ -40,8 +40,8 @@ public class ContoDao {
 	}
 
 	public void changeSaldo(int importo, int contoid) throws SQLException {
-		String queryUpdate = "UPDATE esercizio4.conto set saldo = ? where contoID = ?";
-		String query = "SELECT saldo FROM esercizio4.conto where contoID = ?";
+		String queryUpdate = "UPDATE esercizio4RIA.conto set saldo = ? where contoID = ?";
+		String query = "SELECT saldo FROM esercizio4RIA.conto where contoID = ?";
 		int saldoAttuale;
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoid);
@@ -64,9 +64,9 @@ public class ContoDao {
 		}
 
 	}
-	
-	public Conto findContoByContoID(int contoID) throws SQLException{
-		String query = "SELECT * FROM esercizio4.conto where contoID = ?";
+
+	public Conto findContoByContoID(int contoID) throws SQLException {
+		String query = "SELECT * FROM esercizio4RIA.conto where contoID = ?";
 		Conto conto = new Conto();
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);

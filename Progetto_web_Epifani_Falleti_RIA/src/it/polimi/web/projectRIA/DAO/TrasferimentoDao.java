@@ -57,7 +57,7 @@ public class TrasferimentoDao {
 
 		java.util.Date d = new java.util.Date();
 
-		String query = "INSERT INTO esercizio4.trasferimento (DestContoID,ContoID,causale,importo,data) VALUES(?,?,?,?,?)";
+		String query = "INSERT INTO esercizio4RIA.trasferimento (DestContoID,ContoID,causale,importo,data) VALUES(?,?,?,?,?)";
 		try (PreparedStatement statement = con.prepareStatement(query)) {
 			statement.setInt(1, destContoID);
 			statement.setInt(2, contoID);
@@ -74,11 +74,11 @@ public class TrasferimentoDao {
 
 	public List<Trasferimento> findTrasferimentibyConto(int contoID) throws SQLException {
 		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
-		String query = "SELECT * FROM esercizio4.trasferimento where ContoID = ?";
+		String query = "SELECT * FROM esercizio4RIA.trasferimento where ContoID = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
-				if (result.isBeforeFirst()){
+				if (result.isBeforeFirst()) {
 					while (result.next()) {
 						Trasferimento t = new Trasferimento();
 						t.setTrasferimentoID(result.getInt("trasferimentoID"));
@@ -96,7 +96,7 @@ public class TrasferimentoDao {
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
-				if (result.isBeforeFirst()){
+				if (result.isBeforeFirst()) {
 					while (result.next()) {
 						Trasferimento t = new Trasferimento();
 						t.setTrasferimentoID(result.getInt("trasferimentoID"));

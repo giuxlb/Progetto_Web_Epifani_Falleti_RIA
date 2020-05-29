@@ -1,7 +1,8 @@
 (function() { // avoid variables ending up in the global scope
-
+//controllo lato client della email e delle password
+//controllo lato client dei campi della form
   // page components
-  var contoDetails, contiList, createTransferForm,
+  var contoDetails, contiList, createTransferForm, confermaTransfer
     pageOrchestrator = new PageOrchestrator(); // main controller
 
   window.addEventListener("load", () => {
@@ -11,12 +12,39 @@
 
 
   // Constructors of view components
-
+  
   function PersonalMessage(_username, messagecontainer) {//messagecontainer sarà l'elemento con id = id_username in Home.html
     this.username = _username;
     this.show = function() {
       messagecontainer.textContent = this.username;
     }
+  }
+  
+  function confermaTransfer(options) {
+	  this.destConto = options["destConto"];
+	  this.destUser = options["destUser"];
+	  this.conto = options["conto"];
+	  this.user = options["user"];
+	  this.balance = options["balance"];
+	  this.tdConferma = options["tdConferma"];
+	  
+	  
+	  this.show = function(message)
+	  {
+		  this.tdConferma.style.visibility = "";
+		  this.destConto.textContent = message.split(" ")[0];
+		  this.destUser.textContent = message.split(" ")[1];
+		  this.conto.textContent = message.split(" ")[2];
+		  this.user.textContent = message.split(" ")[3];
+		  this.balance.textContent = message.split(" ")[4];
+	  }
+	  
+	  this.reset = function()
+	  {
+		  this.tdConferma.style.visibility = "hidden";
+	  }
+	  
+	  
   }
 
   function contiList(_alert, _listcontainer, _listcontainerbody) {
@@ -73,7 +101,7 @@
           anchor.setAttribute('contoid', conto.id); // set a custom HTML attribute
           anchor.addEventListener("click", (e) => {
             // dependency via module parameter
-            contiDetails.show(e.target.getAttribute("contoid")); // the list must know the details container
+            contoDetails.show(e.target.getAttribute("contoid")); // the list must know the details container
           }, false);
           anchor.href = "#";
           row.appendChild(linkcell);
@@ -97,9 +125,9 @@
 
   function contoDetails(options) {
 	  
-	  this.alert = _alert;
-	  this.listcontainer = _listcontainer;
-	  this.listcontainerbody = _listcontainerbody;
+	  this.alert = options["alert"];
+	  this.listcontainer = options["listcontainer"];
+	  this.listcontainerbody = options["listcontainerbody"];
 	  this.contoID = 0;
 
     this.show = function(contoid) {
@@ -114,7 +142,7 @@
               self.update(trasferimenti); // self is the object on which the function           
               
             } else {
-              self.alert.textContent = message;
+              self.alert.textContent = "Dio porco";
 
             }
           }
@@ -149,7 +177,7 @@
           row.appendChild(importocell);
           
           destIDcell = document.createElement("td");
-          destIDcell.textContent = trasferimento.DestContoID;
+          destIDcell.textContent = trasferimento.DestContoId;
           row.appendChild(destIDcell);
           
           purposecell = document.createElement("td");
@@ -167,7 +195,7 @@
         	  statuscell.textContent = "USCITA";
           }
           
-          row.appendChild(idcell);
+          row.appendChild(statuscell);
           self.listcontainerbody.appendChild(row);
         });
         this.listcontainer.style.visibility = "visible";
@@ -202,7 +230,10 @@
                 if (req.readyState == XMLHttpRequest.DONE) {
                   var message = req.responseText; 
                   if (req.status == 200) {
-                    orchestrator.refresh(message); 
+                    orchestrator.refreshConfermaTrasferimento(message); 
+                    self.alert.textContent = "";
+                    contiList.show();
+                    contoDetails.show(contoDetails.contoID);
                   } else {
                     self.alert.textContent = message;
                     self.reset();
@@ -215,7 +246,7 @@
       };
 
     this.reset = function() {
-      var fieldsets = document.querySelectorAll("#" + this.wizard.id + " fieldset");
+      var fieldsets = document.querySelectorAll("#" + this.transferForm.id + " fieldset");
       fieldsets[0].hidden = false;
      }
 
@@ -223,49 +254,53 @@
 
   function PageOrchestrator() {
     var alertContainer = document.getElementById("id_alert");
+    
     this.start = function() {
       personalMessage = new PersonalMessage(sessionStorage.getItem('username'),
         document.getElementById("id_username"));
       personalMessage.show();
 
-      missionsList = new MissionsList(
+      contiList = new contiList(
         alertContainer,
-        document.getElementById("id_listcontainer"),
-        document.getElementById("id_listcontainerbody"));
-
-      missionDetails = new MissionDetails({ // many parameters, wrap them in an
-        // object
-        alert: alertContainer,
-        detailcontainer: document.getElementById("id_detailcontainer"),
-        expensecontainer: document.getElementById("id_expensecontainer"),
-        expenseform: document.getElementById("id_expenseform"),
-        closeform: document.getElementById("id_closeform"),
-        date: document.getElementById("id_date"),
-        destination: document.getElementById("id_destination"),
-        status: document.getElementById("id_status"),
-        description: document.getElementById("id_description"),
-        country: document.getElementById("id_country"),
-        province: document.getElementById("id_province"),
-        city: document.getElementById("id_city"),
-        fund: document.getElementById("id_fund"),
-        food: document.getElementById("id_food"),
-        accomodation: document.getElementById("id_accomodation"),
-        transportation: document.getElementById("id_transportation")
+        document.getElementById("id_conticontainer"),
+        document.getElementById("id_conticontainerbody"));
+      
+      confermaTransfer = new confermaTransfer({
+    	  tdConferma : document.getElementById("id_confermaTrasferimento"),
+    	  destConto : document.getElementById("id_contoAddr"),
+    	  destUser :document.getElementById("id_userAddr"),
+    	  conto : document.getElementById("id_conto"),
+    	  user : document.getElementById("id_user"),
+    	  balance : document.getElementById("id_amount")
       });
-      missionDetails.registerEvents(this);
 
-      wizard = new Wizard(document.getElementById("id_createmissionform"), alertContainer);
-      wizard.registerEvents(this);
+      contoDetails = new contoDetails({ // many parameters, wrap them in an
+        // object
+        alert:alertContainer,
+        listcontainer:document.getElementById("id_trasferimenticontainer"),
+        listcontainerbody:document.getElementById("id_trasferimenticontainerbody")
+      });
+      
+
+      createTransferForm = new createTransferForm(document.getElementById("id_createtransferform"), alertContainer);
+      createTransferForm.registerEvents(this);
+    };
+    
+    this.refreshConfermaTrasferimento = function(message)
+    {
+    	confermaTransfer.reset();
+    	confermaTransfer.show(message);
     };
 
-
     this.refresh = function(currentConto) {
-      missionsList.reset();
-      missionDetails.reset();
-      missionsList.show(function() {
-        missionsList.autoclick(currentConto);
+      contiList.reset();
+      confermaTransfer.reset();
+      contoDetails.reset();
+      contiList.show(function() {
+        contiList.autoclick(currentConto);
       }); // closure preserves visibility of this
-      wizard.reset();
+      
+      createTransferForm.reset();
     };
   }
 })();

@@ -26,7 +26,7 @@ import it.polimi.web.projectRIA.utils.ConnectionHandler;
 /**
  * Servlet implementation class GetContoDetailsa
  */
-@WebServlet("/GetContoDetailsa")
+@WebServlet("/GetContoDetail")
 public class GetContoDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -84,7 +84,7 @@ public class GetContoDetail extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "You don't own that bank account");
 			return;
 		}
-
+		session.setAttribute("contoid", contoID);
 		TrasferimentoDao tDao = new TrasferimentoDao(connection);
 
 		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
@@ -96,6 +96,11 @@ public class GetContoDetail extends HttpServlet {
 			return;
 		}
 
+		if (trasferimenti.size() == 0) {
+
+			response.sendError(HttpServletResponse.SC_NO_CONTENT, "No transfers available");
+			return;
+		}
 		Gson gson = new GsonBuilder().create();
 		String json = gson.toJson(trasferimenti);
 
