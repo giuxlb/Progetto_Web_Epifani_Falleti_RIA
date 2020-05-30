@@ -23,7 +23,7 @@ public class ContoDao {
 			pstatement.setInt(1, userId);
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (!result.isBeforeFirst())
-					return null;
+					return conti;
 				else {
 					while (result.next()) {
 						Conto c = new Conto();

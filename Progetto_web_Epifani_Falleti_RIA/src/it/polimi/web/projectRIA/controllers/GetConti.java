@@ -60,6 +60,12 @@ public class GetConti extends HttpServlet {
 			return;
 		}
 
+		if (conti.size() == 0) {
+			System.out.println("NON CI SONO conti");
+			response.setStatus(HttpServletResponse.SC_LENGTH_REQUIRED);
+			response.getWriter().write("No bank accounts available");
+			return;
+		}
 		Gson gson = new GsonBuilder().create();
 		String json = gson.toJson(conti);
 
