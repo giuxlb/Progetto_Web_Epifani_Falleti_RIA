@@ -31,7 +31,7 @@
 	  
 	  this.show = function(message)
 	  {
-		  this.tdConferma.style.visibility = "";
+		  this.tdConferma.style.visibility = "visible";
 		  this.destConto.textContent = message.split(" ")[0];
 		  this.destUser.textContent = message.split(" ")[1];
 		  this.conto.textContent = message.split(" ")[2];
@@ -138,11 +138,12 @@
           if (req.readyState == 4) {
             var message = req.responseText;
             if (req.status == 200) {
-              var trasferimenti = JSON.parse(req.responseText);
+              var trasferimenti = JSON.parse(req.responseText);   
               self.update(trasferimenti); // self is the object on which the function           
-              
+             
             } else {
-              self.alert.textContent = "Dio porco";
+              self.alert.textContent = message;
+              console.log(message);
 
             }
           }
@@ -207,6 +208,7 @@
     
     this.transferForm = formID;
     this.alert = alert;
+    this.saldo = 0;
 
 
     
@@ -222,7 +224,9 @@
               break;
             }
           }
-
+          
+          
+          
           if (valid) {
             var self = this;
             makeCall("POST", 'CreateTransfer', e.target.closest("form"),
@@ -274,8 +278,8 @@
     	  balance : document.getElementById("id_amount")
       });
 
-      contoDetails = new contoDetails({ // many parameters, wrap them in an
-        // object
+      contoDetails = new contoDetails({ 
+       
         alert:alertContainer,
         listcontainer:document.getElementById("id_trasferimenticontainer"),
         listcontainerbody:document.getElementById("id_trasferimenticontainerbody")
@@ -298,9 +302,9 @@
       contoDetails.reset();
       contiList.show(function() {
         contiList.autoclick(currentConto);
-      }); // closure preserves visibility of this
+      }); 
       
-      createTransferForm.reset();
+      createTransferForm.reset(currentConto);
     };
   }
 })();

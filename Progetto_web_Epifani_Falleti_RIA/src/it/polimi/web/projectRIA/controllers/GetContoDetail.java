@@ -95,10 +95,11 @@ public class GetContoDetail extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover transfers");
 			return;
 		}
-
+		System.out.println(trasferimenti.size());
 		if (trasferimenti.size() == 0) {
-
-			response.sendError(HttpServletResponse.SC_NO_CONTENT, "No transfers available");
+			System.out.println("NON CI SONO TRASFERIMENTI");
+			response.setStatus(HttpServletResponse.SC_LENGTH_REQUIRED);
+			response.getWriter().write("No transfers available");
 			return;
 		}
 		Gson gson = new GsonBuilder().create();
