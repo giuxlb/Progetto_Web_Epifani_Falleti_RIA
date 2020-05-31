@@ -4,7 +4,8 @@
 <meta charset="ISO-8859-1">
 <title>Login page</title>
 <link rel="stylesheet" type="text/css" media="all"
-	href="../CSS/mystyle.css"/>
+	href="mystyle.css" />
+	<style type = "text/css">@import URL ("mystyle.css");</style>
 <script src="utils.js" charset="utf-8" defer></script>
 <script src="loginManagement.js" charset="utf-8" defer></script>
 <script src="registerManagement.js" charset="utf-8" defer></script>
@@ -15,8 +16,8 @@
 
 	<form action="#">
 	<fieldset>
-		Username: <input id="user" type="text" name="username" required> <br>
-		Password: <input type="password" name="pwd" required><br>
+		<label>Username:</label> <input id="user" type="text" name="username" required> <br>
+		<label>Password:</label><input type="password" name="pwd" required><br>
 		<input id="loginbutton" type="button" value="login">
 		<p id="errormessage"></p>
 		<p id="infomessage"></p>
@@ -25,11 +26,11 @@
 	<h2>Form per la registrazione</h2>
 	<form action="#">
 	<fieldset>
-		Mail: <input type="text" name="usernameR" required> <br>
-		Nome: <input type="text" name="name" required> <br>
-		Cognome: <input type="text" name="surname" required> <br>
-		Password: <input type="password" name="pwdR" required><br>
-		Ripeti Password: <input type="password" name="pwdripR" required><br>
+		<label>Mail:</label> <input type="text" name="usernameR" required> <br>
+		<label>Nome:</label> <input type="text" name="name" required> <br>
+		<label>Cognome:</label> <input type="text" name="surname" required> <br>
+		<label>Password:</label> <input type="password" name="pwdR" required><br>
+		<label>Ripeti Password:</label><input type="password" name="pwdripR" required><br>
 		<input id="registerbutton" type="button" value="register">
 		<p id="errormessageR"></p>
 	</fieldset>

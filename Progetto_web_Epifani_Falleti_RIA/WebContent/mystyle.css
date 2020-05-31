@@ -10,7 +10,8 @@ h1, h2 {
 }
 
 label {
-	width: 100px;
+	width: 120px;
+	height: 30px;
 	display: inline-block;
 }
 
