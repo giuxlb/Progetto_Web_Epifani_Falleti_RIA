@@ -17,7 +17,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import it.polimi.web.projectRIA.DAO.ContattoDao;
-import it.polimi.web.projectRIA.beans.Conto;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -50,10 +49,10 @@ public class GetContatti extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		ContattoDao contactdao = new ContattoDao(connection);
-		List<Conto> conti = new ArrayList<Conto>();
+		List<Integer> contatti = new ArrayList<Integer>();
 
 		try {
-			conti = contactdao.contactsOfUser(user.getId());
+			contatti = contactdao.contactsOfUser(user.getId());
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");
@@ -61,16 +60,10 @@ public class GetContatti extends HttpServlet {
 		}
 
 		List<Integer> daInviare = new ArrayList<Integer>();
-		if (request.getParameter("user").equals("1")) // vuol dire che sta digitando sul texfield per lo user id
-		{
-			for (int i = 0; i < conti.size(); i++) {
-				if (!daInviare.contains(conti.get(i).getUserID()))
-					daInviare.add(conti.get(i).getUserID());
-			}
-		} else {// vuol dire che sta digitando sul textfield per il conto id
-			for (int i = 0; i < conti.size(); i++) {
-				daInviare.add(conti.get(i).getID());
-			}
+
+		for (int i = 0; i < contatti.size(); i++) {
+			if (!daInviare.contains(contatti.get(i)))
+				daInviare.add(contatti.get(i));
 		}
 
 		Gson gson = new GsonBuilder().create();

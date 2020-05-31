@@ -89,7 +89,7 @@
 		  this.tdConferma.style.visibility = "hidden";
 		  document.getElementById("messageC").style.visibility = "hidden";
 		  this.okButton.style.visibility = "hidden";
-		  makeCall("GET", 'GetContatti?user=1',document.getElementById("id_createtransferform"),
+		  makeCall("GET", 'GetContatti',document.getElementById("id_createtransferform"),
           		function(req) {
           		if (req.readyState == XMLHttpRequest.DONE) {
           		var message = req.responseText; 
@@ -275,7 +275,7 @@
     this.listaUser = [0];
     this.listaConti = [0];
     var self = this;
-    makeCall("GET", 'GetContatti?user=1', self.transferForm,
+    makeCall("GET", 'GetContatti', self.transferForm,
 		function(req) {
 		if (req.readyState == XMLHttpRequest.DONE) {
 		var message = req.responseText; 
