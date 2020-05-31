@@ -64,7 +64,8 @@ public class GetContatti extends HttpServlet {
 		if (request.getParameter("user").equals("1")) // vuol dire che sta digitando sul texfield per lo user id
 		{
 			for (int i = 0; i < conti.size(); i++) {
-				daInviare.add(conti.get(i).getUserID());
+				if (!daInviare.contains(conti.get(i).getUserID()))
+					daInviare.add(conti.get(i).getUserID());
 			}
 		} else {// vuol dire che sta digitando sul textfield per il conto id
 			for (int i = 0; i < conti.size(); i++) {
