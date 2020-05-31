@@ -3,6 +3,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Home Page</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" " />
 <script src="utils.js" charset="utf-8" defer></script>
 <script src="TransferManagement.js" charset="utf-8" defer></script>
 </head>
@@ -52,8 +54,11 @@
 				<p>Use the form to make a transfer</p>
 				<form id="id_createtransferform" action="#">
 					<fieldset>
-						User ID: <input type="number" name="destUserID" required> <br> 
-						Bank account ID: <input type="number" name="destContoID" required><br>
+						User ID: <input id ="destUserID" type="number" list = "userList" name="destUserID" required> <br> 
+						<datalist id = "userList">
+						
+						</datalist>
+						Bank account ID: <input id = "destContoID" type="number" name="destContoID" required><br>
 						Amount: <input type="number" name="amount"  required><br>
 						Purpose: <input type="text" name="causale" required><br>
 						<input type="button" name="submit" value="submit" class="submit">
@@ -69,7 +74,7 @@
 			<p>Bank account ID  <span id="id_conto"></span></p>
 			<p>Your User ID <span id="id_user"></span></p>
 			<p>Actual balance<span id="id_amount"></span></p>
-			<input type = "button" name="ok" value ="ok" class = "ok">
+			<input id = "id_ok" type = "button" name="ok" value ="ok" class = "ok">
 			
 			</td>
 		</tr>
