@@ -17,3 +17,23 @@
 	      formElement.reset();
 	    }
 	  }
+	
+	function checkPassword(password1,password2) {
+		console.log("controllo le password");
+		console.log(password1);
+		console.log(password2);
+        if (password1 === password2){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+	
+	function checkMail(email)
+	{
+		 const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		 return re.test(String(email).toLowerCase());
+	}
+	
+	

@@ -7,6 +7,9 @@
   document.getElementById("loginbutton").addEventListener('click', (e) => {
     var form = e.target.closest("form");
     if (form.checkValidity()) {
+      if (checkPassword(form.elements["pwdR"],form.elements["pwdripR"]))
+     {
+    	  console.log("password uguali");
       makeCall("POST", 'CheckLogin', e.target.closest("form"),
         function(req) {
           if (req.readyState == XMLHttpRequest.DONE) {
@@ -29,6 +32,11 @@
           }
         }
       );
+     }
+      else{
+    	  console.log("password NON uguali");
+    	  document.getElementById("errormessageR").textContent = "Le password non sono uguali";
+      }
     } else {
     	 form.reportValidity();
     }

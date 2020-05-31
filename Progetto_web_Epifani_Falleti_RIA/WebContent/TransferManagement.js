@@ -190,6 +190,7 @@
              
             } else {
               self.alert.textContent = message;
+              self.listcontainerbody.innerHTML = "";
               console.log(message);
 
             }
@@ -209,7 +210,9 @@
         elem, i, row, idcell, importocell, destIDcell,purposecell,datecell,statuscell;
       if (l == 0) {
         alert.textContent = "No transfers yet!";
+        
       } else {
+    	  this.alert.textContent = "";
         this.listcontainerbody.innerHTML = ""; // table body with id="id_trasferimenticontainerbody"
         // build updated list
         var self = this;
@@ -285,6 +288,13 @@
               break;
             }
           }
+          console.log(eventfieldset.elements["amount"].valueAsNumber);
+          if (eventfieldset.elements["amount"].valueAsNumber < 0)
+        	  {
+        	  console.log("importo non valido");
+        	  document.getElementById("id_alertTransfer").textContent = "Importo negativo non valido";
+        	  valid = false;
+        	  }
           if (valid) {
             var self = this;
             makeCall("POST", 'CreateTransfer', e.target.closest("form"),
@@ -295,6 +305,7 @@
                     orchestrator.refreshConfermaTrasferimento(message); 
                     self.alert.textContent = "";
                     contiList.show();
+                    document.getElementById("id_alertTransfer").textContent = "";
                     contoDetails.show(contoDetails.contoID);
                   } else {
                     self.alert.textContent = message;

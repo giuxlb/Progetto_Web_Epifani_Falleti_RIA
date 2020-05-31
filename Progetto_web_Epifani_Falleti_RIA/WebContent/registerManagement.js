@@ -7,6 +7,10 @@
   document.getElementById("registerbutton").addEventListener('click', (e) => {
     var form = e.target.closest("form");
     if (form.checkValidity()) {
+    	  if (checkPassword(form.elements["pwdR"].value,form.elements["pwdripR"].value))
+    	     {
+    	    	 if (checkMail(form.elements["usernameR"].value))
+    	{
       makeCall("POST", 'RegisterUser', e.target.closest("form"),
         function(req) {
           if (req.readyState == XMLHttpRequest.DONE) {
@@ -15,11 +19,14 @@
               case 200:
             	document.getElementById("user").value = message;
             	document.getElementById("infomessage").textContent = "Utente registrato";
-              
+            	 document.getElementById("errormessageR").textContent = "";
                 break;
               case 400: // bad request
                 document.getElementById("errormessageR").textContent = message;
                 break;
+              case 401: // unauthorized
+                  document.getElementById("errormessageR").textContent = message;
+                  break;
               case 500: // server error
             	document.getElementById("errormessageR").textContent = message;
                 break;
@@ -27,6 +34,15 @@
           }
         }
       );
+    }
+    else {
+    	document.getElementById("errormessageR").textContent = "La mail inserita non è valida";	 
+    	  }
+    }else{
+    	 console.log("password NON uguali");
+   	  document.getElementById("errormessageR").textContent = "Le password non sono uguali";
+    }
+    	  
     } else {
     	 form.reportValidity();
     }
