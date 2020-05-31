@@ -1,6 +1,6 @@
 (function() { // avoid variables ending up in the global scope
-//controllo lato client della email e delle password
-//controllo lato client dei campi della form
+//rimane una options
+	
   // page components
   var contoDetails, contiList, createTransferForm, confermaTransfer
     pageOrchestrator = new PageOrchestrator(); // main controller
@@ -58,17 +58,28 @@
 		  this.conto.textContent = message.split(" ")[2];
 		  this.user.textContent = message.split(" ")[3];
 		  this.balance.textContent = message.split(" ")[4];
+		  var putItHidden = false;
 		  for(var i = 0;i<createTransferForm.listaUser.length;i++)
 			 {
-			  console.log(this.destUser.textContent);
+			  console.log("Il contatto sarebbe " + this.destUser.textContent);
 			  console.log(createTransferForm.listaUser[i]);
 			  if (this.destUser.textContent === createTransferForm.listaUser[i].toString())
 				  {
-				  	this.okButton.style.visibility = "hidden";
+					putItHidden = true;
+				  	break;
 				  	
 				  }
 				  
 			 }
+		  if (putItHidden)
+			  {
+			    this.okButton.style.visibility = "hidden";
+			  	document.getElementById("messageC").style.visibility = "hidden";
+			  }
+		  else{
+			  this.okButton.style.visibility = "visible";
+			  	document.getElementById("messageC").style.visibility = "visible";
+		  }
 		  this.tdConferma.style.visibility = "visible";
 		  
 	  }
@@ -76,6 +87,8 @@
 	  this.reset = function()
 	  {
 		  this.tdConferma.style.visibility = "hidden";
+		  document.getElementById("messageC").style.visibility = "hidden";
+		  this.okButton.style.visibility = "hidden";
 		  makeCall("GET", 'GetContatti?user=1',document.getElementById("id_createtransferform"),
           		function(req) {
           		if (req.readyState == XMLHttpRequest.DONE) {
@@ -289,7 +302,7 @@
             }
           }
           console.log(eventfieldset.elements["amount"].valueAsNumber);
-          if (eventfieldset.elements["amount"].valueAsNumber < 0)
+          if (eventfieldset.elements["amount"].valueAsNumber <= 0)
         	  {
         	  console.log("importo non valido");
         	  document.getElementById("id_alertTransfer").textContent = "Importo negativo non valido";
@@ -322,18 +335,25 @@
         var inputConto =  document.getElementById("destContoID");
         
         
-        inputUser.addEventListener("keypress",(e) => {
+        inputUser.addEventListener("keydown",(e) => {
         	//qua finisce la makeCall
         var datalistaUser = self.transferForm.querySelector("#userList");
         datalistaUser.innerHTML = "";
-        var digitato = inputUser.value;
+        var digitato = "";
+        if (e.keyCode != 8)
+        {
+        	digitato = inputUser.value + e.key;
+        }
+        else{
+        	digitato = inputUser.value.slice(0,-1);
+        }
         console.log(digitato);
         
         //ora devo prendere tutti gli userId che mi escono e che iniziano con quel carattere e aggiungerli come nodi options figli di datalistaUser 
         console.log("inizio il for");
         for (var i = 0; i<self.listaUser.length; i++){
         	var c = self.listaUser[i].toString();
-        	if (c.indexOf(digitato) > -1)   //ciao //i ritorna 1
+        	if (c.indexOf(digitato) == 0)   //ciao //i ritorna 1
         	{
         		var node = document.createElement("option"); 
                 var val = document.createTextNode(c); 
