@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import it.polimi.web.projectRIA.beans.Conto;
-import it.polimi.web.projectRIA.beans.Trasferimento;
+import it.polimi.web.projectRIA.beans.Count;
+import it.polimi.web.projectRIA.beans.Transfer;
 
 public class TrasferimentoDao {
 
@@ -23,7 +23,7 @@ public class TrasferimentoDao {
 			String causale) throws SQLException {
 		ContoDao cdao = new ContoDao(con);
 
-		List<Conto> conti = cdao.findContoByUser(destUserID);
+		List<Count> conti = cdao.findContoByUser(destUserID);
 
 		boolean verified1 = false;
 
@@ -42,8 +42,8 @@ public class TrasferimentoDao {
 		if (!verified1)
 			return 0;
 
-		Conto conto = cdao.findContoByContoID(contoID);
-		if (conto.getSaldo() < importo)
+		Count conto = cdao.findContoByContoID(contoID);
+		if (conto.getBalance() < importo)
 			return 1;
 
 		// se verified è ancora false, ritorniamo false
@@ -72,21 +72,21 @@ public class TrasferimentoDao {
 		return 2;
 	}
 
-	public List<Trasferimento> findTrasferimentibyConto(int contoID) throws SQLException {
-		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
+	public List<Transfer> findTrasferimentibyConto(int contoID) throws SQLException {
+		List<Transfer> trasferimenti = new ArrayList<Transfer>();
 		String query = "SELECT * FROM esercizio4RIA.trasferimento where ContoID = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (result.isBeforeFirst()) {
 					while (result.next()) {
-						Trasferimento t = new Trasferimento();
-						t.setTrasferimentoID(result.getInt("trasferimentoID"));
-						t.setCausale(result.getString("causale"));
-						t.setContoID(contoID);
+						Transfer t = new Transfer();
+						t.setTransferID(result.getInt("trasferimentoID"));
+						t.setCausal(result.getString("causale"));
+						t.setCountID(contoID);
 						t.setData(result.getDate("data"));
-						t.setImporto(result.getInt("importo"));
-						t.setDestContoId(result.getInt("DestContoID"));
+						t.setAmount(result.getInt("importo"));
+						t.setDestCountId(result.getInt("DestContoID"));
 						trasferimenti.add(t);
 					}
 				}
@@ -98,23 +98,23 @@ public class TrasferimentoDao {
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (result.isBeforeFirst()) {
 					while (result.next()) {
-						Trasferimento t = new Trasferimento();
-						t.setTrasferimentoID(result.getInt("trasferimentoID"));
-						t.setCausale(result.getString("causale"));
-						t.setContoID(contoID);
+						Transfer t = new Transfer();
+						t.setTransferID(result.getInt("trasferimentoID"));
+						t.setCausal(result.getString("causale"));
+						t.setCountID(contoID);
 						t.setData(result.getDate("data"));
-						t.setImporto(result.getInt("importo"));
-						t.setDestContoId(result.getInt("DestContoID"));
+						t.setAmount(result.getInt("importo"));
+						t.setDestCountId(result.getInt("DestContoID"));
 						trasferimenti.add(t);
 					}
 				}
 			}
 		}
-		trasferimenti.sort(new Comparator<Trasferimento>() {
+		trasferimenti.sort(new Comparator<Transfer>() {
 			@Override
-			public int compare(Trasferimento t1, Trasferimento t2) {
+			public int compare(Transfer t1, Transfer t2) {
 				if (t1.getData().compareTo(t2.getData()) == 0) {
-					return t2.getTrasferimentoID() - t1.getTrasferimentoID();
+					return t2.getTransferID() - t1.getTransferID();
 				} else if (t1.getData().compareTo(t2.getData()) > 0)
 					return -1;
 				return 1;

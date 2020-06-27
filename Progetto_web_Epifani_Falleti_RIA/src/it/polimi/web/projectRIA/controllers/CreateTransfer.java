@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import it.polimi.web.projectRIA.DAO.ContoDao;
 import it.polimi.web.projectRIA.DAO.TrasferimentoDao;
-import it.polimi.web.projectRIA.beans.Conto;
+import it.polimi.web.projectRIA.beans.Count;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -93,7 +93,7 @@ public class CreateTransfer extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
 		}
 
-		Conto c = new Conto();
+		Count c = new Count();
 		ContoDao cdao = new ContoDao(connection);
 		try {
 			c = cdao.findContoByContoID(ContoID);
@@ -119,7 +119,7 @@ public class CreateTransfer extends HttpServlet {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter()
-					.println(DestContoID + " " + DestUserID + " " + ContoID + " " + user.getId() + " " + c.getSaldo());
+					.println(DestContoID + " " + DestUserID + " " + ContoID + " " + user.getId() + " " + c.getBalance());
 		}
 	}
 

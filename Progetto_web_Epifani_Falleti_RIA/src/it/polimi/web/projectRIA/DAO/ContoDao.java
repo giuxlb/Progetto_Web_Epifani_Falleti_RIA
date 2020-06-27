@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.web.projectRIA.beans.Conto;
+import it.polimi.web.projectRIA.beans.Count;
 
 public class ContoDao {
 	private Connection con;
@@ -16,9 +16,9 @@ public class ContoDao {
 		this.con = c;
 	}
 
-	public List<Conto> findContoByUser(int userId) throws SQLException {
+	public List<Count> findContoByUser(int userId) throws SQLException {
 		String query = "SELECT * FROM esercizio4RIA.conto where userID = ?";
-		List<Conto> conti = new ArrayList<Conto>();
+		List<Count> conti = new ArrayList<Count>();
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, userId);
 			try (ResultSet result = pstatement.executeQuery()) {
@@ -26,9 +26,9 @@ public class ContoDao {
 					return conti;
 				else {
 					while (result.next()) {
-						Conto c = new Conto();
+						Count c = new Count();
 						c.setID(result.getInt("contoID"));
-						c.setSaldo(result.getInt("saldo"));
+						c.setBalance(result.getInt("saldo"));
 						c.setUserID(userId);
 						conti.add(c);
 					}
@@ -65,9 +65,9 @@ public class ContoDao {
 
 	}
 
-	public Conto findContoByContoID(int contoID) throws SQLException {
+	public Count findContoByContoID(int contoID) throws SQLException {
 		String query = "SELECT * FROM esercizio4RIA.conto where contoID = ?";
-		Conto conto = new Conto();
+		Count conto = new Count();
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, contoID);
 			try (ResultSet result = pstatement.executeQuery()) {
@@ -76,7 +76,7 @@ public class ContoDao {
 				else {
 					result.next();
 					conto.setID(result.getInt("contoID"));
-					conto.setSaldo(result.getInt("saldo"));
+					conto.setBalance(result.getInt("saldo"));
 					conto.setUserID(result.getInt("userID"));
 				}
 			}

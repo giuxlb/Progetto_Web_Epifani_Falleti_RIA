@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import it.polimi.web.projectRIA.DAO.ContoDao;
-import it.polimi.web.projectRIA.beans.Conto;
+import it.polimi.web.projectRIA.beans.Count;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -51,7 +51,7 @@ public class GetConti extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		ContoDao contodao = new ContoDao(connection);
-		List<Conto> conti = new ArrayList<Conto>();
+		List<Count> conti = new ArrayList<Count>();
 		try {
 			conti = contodao.findContoByUser(user.getId());
 		} catch (SQLException e) {

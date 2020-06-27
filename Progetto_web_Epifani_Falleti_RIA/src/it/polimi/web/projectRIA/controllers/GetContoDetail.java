@@ -18,8 +18,8 @@ import com.google.gson.GsonBuilder;
 
 import it.polimi.web.projectRIA.DAO.ContoDao;
 import it.polimi.web.projectRIA.DAO.TrasferimentoDao;
-import it.polimi.web.projectRIA.beans.Conto;
-import it.polimi.web.projectRIA.beans.Trasferimento;
+import it.polimi.web.projectRIA.beans.Count;
+import it.polimi.web.projectRIA.beans.Transfer;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -63,7 +63,7 @@ public class GetContoDetail extends HttpServlet {
 		}
 		ContoDao cdao = new ContoDao(connection);
 		User u = (User) session.getAttribute("user");
-		List<Conto> conti = new ArrayList<Conto>();
+		List<Count> conti = new ArrayList<Count>();
 		try {
 			conti = cdao.findContoByUser(u.getId());
 		} catch (SQLException e) {
@@ -87,7 +87,7 @@ public class GetContoDetail extends HttpServlet {
 		session.setAttribute("contoid", contoID);
 		TrasferimentoDao tDao = new TrasferimentoDao(connection);
 
-		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
+		List<Transfer> trasferimenti = new ArrayList<Transfer>();
 		try {
 			trasferimenti = tDao.findTrasferimentibyConto(contoID);
 		} catch (SQLException e) {
