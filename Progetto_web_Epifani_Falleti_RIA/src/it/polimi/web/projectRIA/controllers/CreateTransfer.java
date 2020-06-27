@@ -60,15 +60,15 @@ public class CreateTransfer extends HttpServlet {
 		HttpSession session = request.getSession();
 		boolean isRequestBad = false;
 		Integer DestUserID = null;
-		Integer DestContoID = null;
+		Integer DestBankAccountD = null;
 		Integer amount = null;
-		String causale = null;
+		String purpose = null;
 		try {
 			DestUserID = Integer.parseInt(request.getParameter("destUserID"));
-			DestContoID = Integer.parseInt(request.getParameter("destContoID"));
+			DestBankAccountD = Integer.parseInt(request.getParameter("destContoID"));
 			amount = Integer.parseInt(request.getParameter("amount"));
-			causale = StringEscapeUtils.escapeJava(request.getParameter("causale"));
-			isRequestBad = causale.isEmpty() || DestUserID < 0 || DestContoID < 0 || amount < 0;
+			purpose = StringEscapeUtils.escapeJava(request.getParameter("causale"));
+			isRequestBad = purpose.isEmpty() || DestUserID < 0 || DestBankAccountD < 0 || amount < 0;
 		} catch (NumberFormatException | NullPointerException e) {
 			isRequestBad = true;
 			e.printStackTrace();
@@ -82,12 +82,11 @@ public class CreateTransfer extends HttpServlet {
 		TrasferimentoDao trasferimentoDao = new TrasferimentoDao(connection);
 		Integer UserID = user.getId();
 		Integer ContoID = (Integer) session.getAttribute("contoid");
-		// Date data = System.currentTimeMillis();
-		System.out.println("Sono qui");
+
 		int trasferimentoValue = -1;
 		try {
-			trasferimentoValue = trasferimentoDao.createTrasferimento(DestUserID, DestContoID, UserID, ContoID, amount,
-					causale);
+			trasferimentoValue = trasferimentoDao.createTrasferimento(DestUserID, DestBankAccountD, UserID, ContoID,
+					amount, purpose);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
@@ -118,8 +117,8 @@ public class CreateTransfer extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter()
-					.println(DestContoID + " " + DestUserID + " " + ContoID + " " + user.getId() + " " + c.getSaldo());
+			response.getWriter().println(
+					DestBankAccountD + " " + DestUserID + " " + ContoID + " " + user.getId() + " " + c.getSaldo());
 		}
 	}
 

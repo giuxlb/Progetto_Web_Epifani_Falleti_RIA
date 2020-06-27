@@ -16,28 +16,30 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.polimi.web.projectRIA.DAO.ContattoDao;
+import it.polimi.web.projectRIA.DAO.ContoDao;
+import it.polimi.web.projectRIA.beans.Conto;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
 /**
- * Servlet implementation class GetContatti
+ * Servlet implementation class GetConti
  */
-@WebServlet("/GetContatti")
-public class GetContatti extends HttpServlet {
+@WebServlet("/GetBankAccounts")
+public class GetBankAccounts extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GetContatti() {
+	public GetBankAccounts() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	public void init() throws ServletException {
 		connection = ConnectionHandler.getConnection(getServletContext());
+
 	}
 
 	/**
@@ -48,26 +50,24 @@ public class GetContatti extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		ContattoDao contactdao = new ContattoDao(connection);
-		List<Integer> contatti = new ArrayList<Integer>();
-
+		ContoDao bankAccountDao = new ContoDao(connection);
+		List<Conto> bankAccounts = new ArrayList<Conto>();
 		try {
-			contatti = contactdao.contactsOfUser(user.getId());
+			bankAccounts = bankAccountDao.findContoByUser(user.getId());
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");
 			return;
 		}
 
-		List<Integer> daInviare = new ArrayList<Integer>();
+		if (bankAccounts.size() == 0) {
 
-		for (int i = 0; i < contatti.size(); i++) {
-			if (!daInviare.contains(contatti.get(i)))
-				daInviare.add(contatti.get(i));
+			response.setStatus(HttpServletResponse.SC_LENGTH_REQUIRED);
+			response.getWriter().write("No bank accounts available");
+			return;
 		}
-
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(daInviare);
+		String json = gson.toJson(bankAccounts);
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

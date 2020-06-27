@@ -34,7 +34,7 @@ public class ContattoDao {
 		return contatti; // ritorna tutti i conti di tutti i contatti dello user con id = userid
 	}
 
-	public void creaContatto(int userid, int contattoid) throws SQLException {
+	public void createContact(int userid, int contattoid) throws SQLException {
 		String query = "INSERT INTO esercizio4RIA.contatto (ownerUserID,contactUserID) VALUES(?,?)";
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, userid);

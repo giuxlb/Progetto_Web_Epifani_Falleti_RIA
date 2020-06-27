@@ -3,6 +3,8 @@ package it.polimi.web.projectRIA.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,22 +13,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import it.polimi.web.projectRIA.DAO.ContattoDao;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
 /**
- * Servlet implementation class CreateContatto
+ * Servlet implementation class GetContatti
  */
-@WebServlet("/CreateContatto")
-public class CreateContatto extends HttpServlet {
+@WebServlet("/GetContacts")
+public class GetContacts extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public CreateContatto() {
+	public GetContacts() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -41,7 +46,33 @@ public class CreateContatto extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doPost(request, response);
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		ContattoDao contactdao = new ContattoDao(connection);
+		List<Integer> contacts = new ArrayList<Integer>();
+
+		try {
+			contacts = contactdao.contactsOfUser(user.getId());
+		} catch (SQLException e) {
+			// for debugging only e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");
+			return;
+		}
+
+		List<Integer> toSend = new ArrayList<Integer>();
+
+		for (int i = 0; i < contacts.size(); i++) {
+			if (!toSend.contains(contacts.get(i)))
+				toSend.add(contacts.get(i));
+		}
+
+		Gson gson = new GsonBuilder().create();
+		String json = gson.toJson(toSend);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+
 	}
 
 	/**
@@ -50,25 +81,8 @@ public class CreateContatto extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		User u = (User) session.getAttribute("user");
-		Integer userId = u.getId();
-		Integer contattoId = 0;
-		try {
-			contattoId = Integer.parseInt(request.getParameter("contattoID"));
-
-		} catch (NumberFormatException | NullPointerException e) {
-			e.printStackTrace();
-		}
-		ContattoDao contactDao = new ContattoDao(connection);
-
-		try {
-			contactDao.creaContatto(userId, contattoId);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
-		}
-
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

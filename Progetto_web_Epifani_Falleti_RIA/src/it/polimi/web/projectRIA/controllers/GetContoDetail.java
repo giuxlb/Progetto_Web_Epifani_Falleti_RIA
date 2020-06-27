@@ -52,9 +52,9 @@ public class GetContoDetail extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		Integer contoID = null;
+		Integer bankAccountID = null;
 		try {
-			contoID = Integer.parseInt(request.getParameter("contoid"));
+			bankAccountID = Integer.parseInt(request.getParameter("contoid"));
 
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
@@ -63,9 +63,9 @@ public class GetContoDetail extends HttpServlet {
 		}
 		ContoDao cdao = new ContoDao(connection);
 		User u = (User) session.getAttribute("user");
-		List<Conto> conti = new ArrayList<Conto>();
+		List<Conto> bankAccounts = new ArrayList<Conto>();
 		try {
-			conti = cdao.findContoByUser(u.getId());
+			bankAccounts = cdao.findContoByUser(u.getId());
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");
@@ -73,8 +73,8 @@ public class GetContoDetail extends HttpServlet {
 		}
 
 		boolean ok = false;
-		for (int i = 0; i < conti.size(); i++) {
-			if (conti.get(i).getID() == contoID) {
+		for (int i = 0; i < bankAccounts.size(); i++) {
+			if (bankAccounts.get(i).getID() == bankAccountID) {
 				ok = true;
 				break;
 			}
@@ -84,26 +84,26 @@ public class GetContoDetail extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "You don't own that bank account");
 			return;
 		}
-		session.setAttribute("contoid", contoID);
+		session.setAttribute("contoid", bankAccountID);
 		TrasferimentoDao tDao = new TrasferimentoDao(connection);
 
-		List<Trasferimento> trasferimenti = new ArrayList<Trasferimento>();
+		List<Trasferimento> transfers = new ArrayList<Trasferimento>();
 		try {
-			trasferimenti = tDao.findTrasferimentibyConto(contoID);
+			transfers = tDao.findTrasferimentibyConto(bankAccountID);
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover transfers");
 			return;
 		}
-		System.out.println(trasferimenti.size());
-		if (trasferimenti.size() == 0) {
-			System.out.println("NON CI SONO TRASFERIMENTI");
+
+		if (transfers.size() == 0) {
+
 			response.setStatus(HttpServletResponse.SC_LENGTH_REQUIRED);
 			response.getWriter().write("No transfers available");
 			return;
 		}
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(trasferimenti);
+		String json = gson.toJson(transfers);
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
