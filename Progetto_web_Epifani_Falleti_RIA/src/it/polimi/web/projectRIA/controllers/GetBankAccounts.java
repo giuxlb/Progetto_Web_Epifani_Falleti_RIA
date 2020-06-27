@@ -16,8 +16,8 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.polimi.web.projectRIA.DAO.ContoDao;
-import it.polimi.web.projectRIA.beans.Conto;
+import it.polimi.web.projectRIA.DAO.BankAccountDao;
+import it.polimi.web.projectRIA.beans.BankAccount;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -50,10 +50,10 @@ public class GetBankAccounts extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		ContoDao bankAccountDao = new ContoDao(connection);
-		List<Conto> bankAccounts = new ArrayList<Conto>();
+		BankAccountDao bankAccountDao = new BankAccountDao(connection);
+		List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 		try {
-			bankAccounts = bankAccountDao.findContoByUser(user.getId());
+			bankAccounts = bankAccountDao.findBankAccountByUser(user.getId());
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");

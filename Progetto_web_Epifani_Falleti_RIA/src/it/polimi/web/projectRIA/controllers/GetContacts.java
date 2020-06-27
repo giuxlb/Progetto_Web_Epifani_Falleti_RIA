@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.polimi.web.projectRIA.DAO.ContattoDao;
+import it.polimi.web.projectRIA.DAO.ContactDao;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -48,7 +48,7 @@ public class GetContacts extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-		ContattoDao contactdao = new ContattoDao(connection);
+		ContactDao contactdao = new ContactDao(connection);
 		List<Integer> contacts = new ArrayList<Integer>();
 
 		try {

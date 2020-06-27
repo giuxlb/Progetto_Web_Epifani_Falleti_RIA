@@ -7,38 +7,38 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContattoDao {
+public class ContactDao {
 	private Connection con;
 
-	public ContattoDao(Connection c) {
+	public ContactDao(Connection c) {
 		this.con = c;
 	}
 
 	public List<Integer> contactsOfUser(int userid) throws SQLException {
 		String query = "SELECT * FROM esercizio4RIA.contatto where ownerUserID = ?";
-		List<Integer> contatti = new ArrayList<Integer>();
+		List<Integer> contacts = new ArrayList<Integer>();
 
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, userid);
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (!result.isBeforeFirst())
-					return contatti;
+					return contacts;
 				else {
 					while (result.next()) {
-						contatti.add(result.getInt("contactUserID"));
+						contacts.add(result.getInt("contactUserID"));
 					}
 
 				}
 			}
 		}
-		return contatti; // ritorna tutti i conti di tutti i contatti dello user con id = userid
+		return contacts;
 	}
 
-	public void createContact(int userid, int contattoid) throws SQLException {
+	public void createContact(int userid, int bankAccountID) throws SQLException {
 		String query = "INSERT INTO esercizio4RIA.contatto (ownerUserID,contactUserID) VALUES(?,?)";
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, userid);
-			pstatement.setInt(2, contattoid);
+			pstatement.setInt(2, bankAccountID);
 			pstatement.execute();
 
 		}

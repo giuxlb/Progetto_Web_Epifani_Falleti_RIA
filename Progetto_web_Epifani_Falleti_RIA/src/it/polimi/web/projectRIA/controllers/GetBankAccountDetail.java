@@ -16,25 +16,25 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.polimi.web.projectRIA.DAO.ContoDao;
-import it.polimi.web.projectRIA.DAO.TrasferimentoDao;
-import it.polimi.web.projectRIA.beans.Conto;
-import it.polimi.web.projectRIA.beans.Trasferimento;
+import it.polimi.web.projectRIA.DAO.BankAccountDao;
+import it.polimi.web.projectRIA.DAO.TransferDao;
+import it.polimi.web.projectRIA.beans.BankAccount;
+import it.polimi.web.projectRIA.beans.Transfer;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
 /**
  * Servlet implementation class GetContoDetailsa
  */
-@WebServlet("/GetContoDetail")
-public class GetContoDetail extends HttpServlet {
+@WebServlet("/GetBankAccountDetail")
+public class GetBankAccountDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GetContoDetail() {
+	public GetBankAccountDetail() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -61,11 +61,13 @@ public class GetContoDetail extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
 			return;
 		}
-		ContoDao cdao = new ContoDao(connection);
+		BankAccountDao cdao = new BankAccountDao(connection);
 		User u = (User) session.getAttribute("user");
-		List<Conto> bankAccounts = new ArrayList<Conto>();
+
+		List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
+
 		try {
-			bankAccounts = cdao.findContoByUser(u.getId());
+			bankAccounts = cdao.findBankAccountByUser(u.getId());
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover bank accounts");
@@ -85,11 +87,12 @@ public class GetContoDetail extends HttpServlet {
 			return;
 		}
 		session.setAttribute("contoid", bankAccountID);
-		TrasferimentoDao tDao = new TrasferimentoDao(connection);
+		TransferDao tDao = new TransferDao(connection);
 
-		List<Trasferimento> transfers = new ArrayList<Trasferimento>();
+		List<Transfer> transfers = new ArrayList<Transfer>();
+
 		try {
-			transfers = tDao.findTrasferimentibyConto(bankAccountID);
+			transfers = tDao.findTransferByBankAccountId(bankAccountID);
 		} catch (SQLException e) {
 			// for debugging only e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to recover transfers");

@@ -7,55 +7,55 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.web.projectRIA.beans.Conto;
+import it.polimi.web.projectRIA.beans.BankAccount;
 
-public class ContoDao {
+public class BankAccountDao {
 	private Connection con;
 
-	public ContoDao(Connection c) {
+	public BankAccountDao(Connection c) {
 		this.con = c;
 	}
 
-	public List<Conto> findContoByUser(int userId) throws SQLException {
+	public List<BankAccount> findBankAccountByUser(int userId) throws SQLException {
 		String query = "SELECT * FROM esercizio4RIA.conto where userID = ?";
-		List<Conto> conti = new ArrayList<Conto>();
+		List<BankAccount> bankAccounts = new ArrayList<BankAccount>();
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
 			pstatement.setInt(1, userId);
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (!result.isBeforeFirst())
-					return conti;
+					return bankAccounts;
 				else {
 					while (result.next()) {
-						Conto c = new Conto();
+						BankAccount c = new BankAccount();
 						c.setID(result.getInt("contoID"));
-						c.setSaldo(result.getInt("saldo"));
+						c.setBalance(result.getInt("saldo"));
 						c.setUserID(userId);
-						conti.add(c);
+						bankAccounts.add(c);
 					}
 
 				}
 			}
 		}
-		return conti;
+		return bankAccounts;
 	}
 
-	public void changeSaldo(int importo, int contoid) throws SQLException {
+	public void changeBalance(int amount, int bankAccountid) throws SQLException {
 		String queryUpdate = "UPDATE esercizio4RIA.conto set saldo = ? where contoID = ?";
 		String query = "SELECT saldo FROM esercizio4RIA.conto where contoID = ?";
-		int saldoAttuale;
+		int actualBalance;
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
-			pstatement.setInt(1, contoid);
+			pstatement.setInt(1, bankAccountid);
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (!result.isBeforeFirst())
 					return;
 				else {
 					result.next();
-					saldoAttuale = result.getInt("saldo");
-					saldoAttuale += importo;
+					actualBalance = result.getInt("saldo");
+					actualBalance += amount;
 
 					try (PreparedStatement statement = con.prepareStatement(queryUpdate)) {
-						statement.setInt(1, saldoAttuale);
-						statement.setInt(2, contoid);
+						statement.setInt(1, actualBalance);
+						statement.setInt(2, bankAccountid);
 						statement.executeUpdate();
 					}
 
@@ -65,22 +65,22 @@ public class ContoDao {
 
 	}
 
-	public Conto findContoByContoID(int contoID) throws SQLException {
+	public BankAccount findBankAccountByBankAccountID(int bankAccountID) throws SQLException {
 		String query = "SELECT * FROM esercizio4RIA.conto where contoID = ?";
-		Conto conto = new Conto();
+		BankAccount bankAccount = new BankAccount();
 		try (PreparedStatement pstatement = con.prepareStatement(query)) {
-			pstatement.setInt(1, contoID);
+			pstatement.setInt(1, bankAccountID);
 			try (ResultSet result = pstatement.executeQuery()) {
 				if (!result.isBeforeFirst())
 					return null;
 				else {
 					result.next();
-					conto.setID(result.getInt("contoID"));
-					conto.setSaldo(result.getInt("saldo"));
-					conto.setUserID(result.getInt("userID"));
+					bankAccount.setID(result.getInt("contoID"));
+					bankAccount.setBalance(result.getInt("saldo"));
+					bankAccount.setUserID(result.getInt("userID"));
 				}
 			}
 		}
-		return conto;
+		return bankAccount;
 	}
 }

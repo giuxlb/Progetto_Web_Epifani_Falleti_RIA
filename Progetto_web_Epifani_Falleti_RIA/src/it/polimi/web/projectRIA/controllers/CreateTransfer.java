@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import it.polimi.web.projectRIA.DAO.ContoDao;
-import it.polimi.web.projectRIA.DAO.TrasferimentoDao;
-import it.polimi.web.projectRIA.beans.Conto;
+import it.polimi.web.projectRIA.DAO.BankAccountDao;
+import it.polimi.web.projectRIA.DAO.TransferDao;
+import it.polimi.web.projectRIA.beans.BankAccount;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -60,15 +60,15 @@ public class CreateTransfer extends HttpServlet {
 		HttpSession session = request.getSession();
 		boolean isRequestBad = false;
 		Integer DestUserID = null;
-		Integer DestBankAccountD = null;
+		Integer DestBankAccountID = null;
 		Integer amount = null;
 		String purpose = null;
 		try {
 			DestUserID = Integer.parseInt(request.getParameter("destUserID"));
-			DestBankAccountD = Integer.parseInt(request.getParameter("destContoID"));
+			DestBankAccountID = Integer.parseInt(request.getParameter("destContoID"));
 			amount = Integer.parseInt(request.getParameter("amount"));
 			purpose = StringEscapeUtils.escapeJava(request.getParameter("causale"));
-			isRequestBad = purpose.isEmpty() || DestUserID < 0 || DestBankAccountD < 0 || amount < 0;
+			isRequestBad = purpose.isEmpty() || DestUserID < 0 || DestBankAccountID < 0 || amount < 0;
 		} catch (NumberFormatException | NullPointerException e) {
 			isRequestBad = true;
 			e.printStackTrace();
@@ -79,28 +79,28 @@ public class CreateTransfer extends HttpServlet {
 		}
 
 		User user = (User) session.getAttribute("user");
-		TrasferimentoDao trasferimentoDao = new TrasferimentoDao(connection);
+		TransferDao trasferimentoDao = new TransferDao(connection);
 		Integer UserID = user.getId();
 		Integer ContoID = (Integer) session.getAttribute("contoid");
 
-		int trasferimentoValue = -1;
+		int transferValue = -1;
 		try {
-			trasferimentoValue = trasferimentoDao.createTrasferimento(DestUserID, DestBankAccountD, UserID, ContoID,
+			transferValue = trasferimentoDao.createTransfer(DestUserID, DestBankAccountID, UserID, ContoID,
 					amount, purpose);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
 		}
 
-		Conto c = new Conto();
-		ContoDao cdao = new ContoDao(connection);
+		BankAccount c = new BankAccount();
+		BankAccountDao cdao = new BankAccountDao(connection);
 		try {
-			c = cdao.findContoByContoID(ContoID);
+			c = cdao.findBankAccountByBankAccountID(ContoID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
 		}
-		switch (trasferimentoValue) {
+		switch (transferValue) {
 
 		case (0):
 			response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
@@ -118,7 +118,7 @@ public class CreateTransfer extends HttpServlet {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().println(
-					DestBankAccountD + " " + DestUserID + " " + ContoID + " " + user.getId() + " " + c.getSaldo());
+					DestBankAccountID + " " + DestUserID + " " + ContoID + " " + user.getId() + " " + c.getBalance());
 		}
 	}
 

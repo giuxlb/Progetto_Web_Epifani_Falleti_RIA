@@ -1,6 +1,6 @@
 package it.polimi.web.projectRIA.beans;
 
-public class Contatto {
+public class Contact {
 	private int rubricaID;
 	private int OwnerUserID;
 	private int ContactUserID;

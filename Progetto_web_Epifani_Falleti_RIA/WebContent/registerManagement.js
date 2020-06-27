@@ -18,7 +18,7 @@
             switch (req.status) {
               case 200:
             	document.getElementById("user").value = message;
-            	document.getElementById("infomessage").textContent = "Utente registrato";
+            	document.getElementById("infomessage").textContent = "User already registered";
             	 document.getElementById("errormessageR").textContent = "";
                 break;
               case 400: // bad request
@@ -36,11 +36,11 @@
       );
     }
     else {
-    	document.getElementById("errormessageR").textContent = "La mail inserita non è valida";	 
+    	document.getElementById("errormessageR").textContent = "Mail not valid";	 
     	  }
     }else{
-    	 console.log("password NON uguali");
-   	  document.getElementById("errormessageR").textContent = "Le password non sono uguali";
+    	 
+   	  document.getElementById("errormessageR").textContent = "Passwords don't match";
     }
     	  
     } else {

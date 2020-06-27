@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import it.polimi.web.projectRIA.DAO.ContattoDao;
+import it.polimi.web.projectRIA.DAO.ContactDao;
 import it.polimi.web.projectRIA.beans.User;
 import it.polimi.web.projectRIA.utils.ConnectionHandler;
 
@@ -60,7 +60,7 @@ public class CreateContact extends HttpServlet {
 		} catch (NumberFormatException | NullPointerException e) {
 			e.printStackTrace();
 		}
-		ContattoDao contactDao = new ContattoDao(connection);
+		ContactDao contactDao = new ContactDao(connection);
 
 		try {
 			contactDao.createContact(userId, contactId);

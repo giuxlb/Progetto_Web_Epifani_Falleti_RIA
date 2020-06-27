@@ -19,9 +19,8 @@
 	  }
 	
 	function checkPassword(password1,password2) {
-		console.log("controllo le password");
-		console.log(password1);
-		console.log(password2);
+		
+		
         if (password1 === password2){
             return true;
         }
