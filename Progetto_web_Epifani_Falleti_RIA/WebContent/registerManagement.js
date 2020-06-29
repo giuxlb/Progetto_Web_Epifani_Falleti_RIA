@@ -18,7 +18,7 @@
             switch (req.status) {
               case 200:
             	document.getElementById("user").value = message;
-            	document.getElementById("infomessage").textContent = "User already registered";
+            	document.getElementById("infomessage").textContent = "User successfully registered";
             	 document.getElementById("errormessageR").textContent = "";
                 break;
               case 400: // bad request
