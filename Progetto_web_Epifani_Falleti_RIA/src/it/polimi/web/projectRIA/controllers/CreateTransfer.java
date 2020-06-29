@@ -63,29 +63,30 @@ public class CreateTransfer extends HttpServlet {
 		Integer DestBankAccountID = null;
 		Integer amount = null;
 		String purpose = null;
+		User user = (User) session.getAttribute("user");
+		TransferDao trasferimentoDao = new TransferDao(connection);
+		Integer UserID = user.getId();
+		Integer bankAccountID = (Integer) session.getAttribute("contoid");
 		try {
 			DestUserID = Integer.parseInt(request.getParameter("destUserID"));
 			DestBankAccountID = Integer.parseInt(request.getParameter("destContoID"));
 			amount = Integer.parseInt(request.getParameter("amount"));
 			purpose = StringEscapeUtils.escapeJava(request.getParameter("causale"));
-			isRequestBad = purpose.isEmpty() || DestUserID < 0 || DestBankAccountID < 0 || amount < 0;
+			isRequestBad = purpose.isEmpty() || DestUserID < 0 || DestBankAccountID < 0 || amount <= 0
+					|| bankAccountID == DestBankAccountID;
 		} catch (NumberFormatException | NullPointerException e) {
 			isRequestBad = true;
 			e.printStackTrace();
 		}
 		if (isRequestBad) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+			response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+			response.getWriter().println("The request is bad");
 			return;
 		}
 
-		User user = (User) session.getAttribute("user");
-		TransferDao trasferimentoDao = new TransferDao(connection);
-		Integer UserID = user.getId();
-		Integer ContoID = (Integer) session.getAttribute("contoid");
-
 		int transferValue = -1;
 		try {
-			transferValue = trasferimentoDao.createTransfer(DestUserID, DestBankAccountID, UserID, ContoID,
+			transferValue = trasferimentoDao.createTransfer(DestUserID, DestBankAccountID, UserID, bankAccountID,
 					amount, purpose);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,7 +96,7 @@ public class CreateTransfer extends HttpServlet {
 		BankAccount c = new BankAccount();
 		BankAccountDao cdao = new BankAccountDao(connection);
 		try {
-			c = cdao.findBankAccountByBankAccountID(ContoID);
+			c = cdao.findBankAccountByBankAccountID(bankAccountID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request");
@@ -117,8 +118,8 @@ public class CreateTransfer extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().println(
-					DestBankAccountID + " " + DestUserID + " " + ContoID + " " + user.getId() + " " + c.getBalance());
+			response.getWriter().println(DestBankAccountID + " " + DestUserID + " " + bankAccountID + " " + user.getId()
+					+ " " + c.getBalance());
 		}
 	}
 
