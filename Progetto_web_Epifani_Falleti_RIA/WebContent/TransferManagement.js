@@ -179,6 +179,7 @@
       var anchorToClick =
         (bankAccountID) ? document.querySelector(selector) : this.listcontainerbody.querySelectorAll("a")[0];// se contoid non è nullo, fa vedere quell'oggetto altrimenti fa vedere il primo
       anchorToClick.dispatchEvent(e);
+      document.getElementById("id_bankAccount").textContent = bankAccountID;
     }
 
   }
@@ -199,7 +200,8 @@
             var message = req.responseText;
             if (req.status == 200) {
               var transfers = JSON.parse(req.responseText);   
-              self.update(transfers); // self is the object on which the function           
+              self.update(transfers); // self is the object on which the function 
+              document.getElementById("id_bankAccount").textContent = bankAccountID;
              
             } else {
               self.alert.textContent = message;
@@ -306,6 +308,11 @@
         	  {
         	  
         	  document.getElementById("id_alertTransfer").textContent = "Negative Amount isn't valid";
+        	  valid = false;
+        	  }
+          if (eventfieldset.elements["destContoID"].valueAsNumber === sessionStorage.getItem('contoid'))
+        	  {
+        	  document.getElementById("id_alertTransfer").textContent = "Can't transfer money from this bank account to itself!";
         	  valid = false;
         	  }
           if (valid) {
