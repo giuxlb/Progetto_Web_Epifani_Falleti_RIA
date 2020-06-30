@@ -179,7 +179,6 @@
       var anchorToClick =
         (bankAccountID) ? document.querySelector(selector) : this.listcontainerbody.querySelectorAll("a")[0];// se contoid non è nullo, fa vedere quell'oggetto altrimenti fa vedere il primo
       anchorToClick.dispatchEvent(e);
-      document.getElementById("id_bankAccount").textContent = bankAccountID;
     }
 
   }
