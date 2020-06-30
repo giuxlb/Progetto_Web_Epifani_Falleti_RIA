@@ -193,6 +193,7 @@
 
     this.show = function(bankAccountID) {
       var self = this;
+      document.getElementById("id_bankAccount").textContent = bankAccountID;
       this.bankAccountID = bankAccountID;
       makeCall("GET", "GetBankAccountDetail?contoid=" + bankAccountID, null,
         function(req) {
@@ -201,7 +202,7 @@
             if (req.status == 200) {
               var transfers = JSON.parse(req.responseText);   
               self.update(transfers); // self is the object on which the function 
-              document.getElementById("id_bankAccount").textContent = bankAccountID;
+              
              
             } else {
               self.alert.textContent = message;
